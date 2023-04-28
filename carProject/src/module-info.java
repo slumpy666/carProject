@@ -1,9 +1,0 @@
-/**
- * 
- */
-/**
- * @author work
- *
- */
-module carProject {
-}
