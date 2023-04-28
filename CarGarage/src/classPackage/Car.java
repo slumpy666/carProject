@@ -101,14 +101,20 @@ public class Car
 
 	public Car()
 	{
-		String[] makes = {"Honda", "Toyota", "Ford", "Chevrolet", "Nissan"};
-        String[] models = {"Civic", "Corolla", "Focus", "Cruze", "Sentra"};
+		String[][] makesAndModels = {
+	            {"Honda", "Civic", "Accord", "CR-V", "Pilot"},
+	            {"Toyota", "Corolla", "Camry", "RAV4", "Highlander"},
+	            {"Ford", "Focus", "Fusion", "Escape", "Explorer"},
+	            {"Chevrolet", "Cruze", "Malibu", "Equinox", "Tahoe"},
+	            {"Nissan", "Sentra", "Altima", "Rogue", "Pathfinder"}
+	        };
         String[] colors = {"Black", "White", "Red", "Blue", "Silver"};
         
         Random rand = new Random();
         
-        setMake(makes[rand.nextInt(makes.length)]);
-        setModel(models[rand.nextInt(models.length)]);
+        String[] makeAndModels = makesAndModels[rand.nextInt(makesAndModels.length)];
+        setMake(makeAndModels[0]);
+        setModel(makeAndModels[rand.nextInt(makeAndModels.length - 1) + 1]);
         setYear(rand.nextInt(102) + 1920);
         double fuelTankSize = 8.0 + rand.nextDouble() * (34.99 - 8.0);
         setFuelTankSize(Double.parseDouble(String.format("%.2f", fuelTankSize))); 
@@ -163,7 +169,7 @@ public class Car
 	
 	@Override
 	public String toString() {
-	    return "Make: " + getMake() + ", Model: " + getModel() + ", Year: " + getYear() + ", Fuel Level: " + getFuelLevel() + ", Fuel Economy: " + getFuelEconomy() + ", Optimal Speed: " + getOptimalSpeed();
+	    return "Make: " + getMake() + ", Model: " + getModel() + ", Year: " + getYear() + ", Fuel Level: " + getFuelLevel() + "/" + getFuelTankSize() + ", Fuel Economy: " + getFuelEconomy() + ", Optimal Speed: " + getOptimalSpeed();
 	}
 
 	public final boolean equals(Car car) {
