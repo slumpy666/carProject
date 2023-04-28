@@ -1,5 +1,11 @@
 package classPackage;
 
+/**
+ * @author Jorge Torre
+ *
+ */
+
+
 import java.util.Random;
 
 

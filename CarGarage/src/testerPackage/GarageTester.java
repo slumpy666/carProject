@@ -4,7 +4,7 @@
 package testerPackage;
 
 /**
- * @author work
+ * @author Jorge Torre
  *
  */
 public class GarageTester {
