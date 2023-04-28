@@ -15,6 +15,8 @@ public class Car
 	private double TripOdometer;
 	private String Color;
 	private double FuelLevel;
+	private double tripSpeed;
+	private double tripDistance;
 	
 	
 	public final String getMake()
@@ -178,24 +180,47 @@ public class Car
 	    }
 	    return false;
 	}
+	public void setUpTrip(double speed, double distance) {
+		this.tripSpeed = speed;
+		this.tripDistance = distance;
+		}
 
 	public final boolean driveCar() {
-	    double distance = 60;
-	    setFuelLevel(distance / getFuelEconomy());
-	    return getFuelLevel() <= 0 ? false : true;
+		double distance = 0.0;
+		double fuelConsumed = 0.0;
+		// Calculate the distance and fuel consumption for the trip
+		if (this.tripSpeed <= this.OptimalSpeed) {
+		    // Car is driven at or below optimal speed
+		    distance = this.tripDistance;
+		    fuelConsumed = distance / this.FuelEconomy;
+		} else {
+		    // Car is driven above optimal speed
+		    double speedRatio = this.tripSpeed / this.OptimalSpeed;
+		    double adjustedFuelEconomy = this.FuelEconomy / speedRatio;
+		    if (adjustedFuelEconomy < 15.0) {
+		        // Car is getting very poor mileage - can't be driven
+		        return false;
+		    } else {
+		        distance = this.tripDistance;
+		        fuelConsumed = distance / adjustedFuelEconomy;
+		    }
+		}
+		if (fuelConsumed <= this.FuelLevel) {
+		    this.FuelLevel -= fuelConsumed;
+		    this.Odometer += distance;
+		    this.TripOdometer += distance;
+		    this.tripDistance = 0.0;
+		    this.tripSpeed = 0.0;
+		    return true;
+		} else {
+		    // Car runs out of fuel before completing the trip
+		    this.Odometer += (this.FuelLevel * this.FuelEconomy);
+		    this.TripOdometer += (this.FuelLevel * this.FuelEconomy);
+		    this.FuelLevel = 0.0;
+		    this.tripDistance = 0.0;
+		    this.tripSpeed = 0.0;
+		    return false;
+		}
 	}
-
-	public final void clearTripOdometer() {
-	    setTripOdometer(0);
-	}
-	
- public final void setUpTrip(double speed, double distance)
- {
-
-			OptimalSpeed = speed;
-			FuelLevel = distance / FuelEconomy;
-
- }
-
 }
 
