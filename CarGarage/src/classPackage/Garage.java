@@ -40,6 +40,7 @@ public class Garage {
         }
         Car car = parking[index];
         parking[index] = null;
+        numCars--;
         return car;
     }
 

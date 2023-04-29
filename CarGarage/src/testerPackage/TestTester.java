@@ -80,6 +80,7 @@ public class TestTester {
 
 	private static void driveCar() {
 		// TODO Auto-generated method stub
+		
 	}
 
 	private static void refuelCar(Garage garage) {
@@ -92,7 +93,7 @@ public class TestTester {
 	    double fuelOverage = 0.0;
 	    double fuelAmount = 0.0;
 	    Car currentCar = null;
-	    
+        System.out.println(garage.toString());
 	    System.out.println("Which car would you like to add fuel to?");
 	    do {
 	        do {
@@ -103,8 +104,8 @@ public class TestTester {
 	        } while(!scanner.hasNextInt());
 	        carNumber = scanner.nextInt();
 	    } while (carNumber < 1 || carNumber > garage.getNumCars());
-	    
-	    currentCar = garage.getCar(carNumber - 1);
+
+	    currentCar = garage.callCar(carNumber - 1);
 	    if (currentCar == null) {
 	        System.out.println("There is no car in that space!");
 	        System.out.printf("Please create a Car for that space.%n");
