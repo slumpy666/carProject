@@ -24,8 +24,14 @@ public class Garage {
         if (numCars >= size) {
             return false;
         }
-        parking[numCars++] = car;
-        return true;
+        for (int i = 0; i < size; i++) {
+            if (parking[i] == null) {
+                parking[i] = car;
+                numCars++;
+                return true;
+            }
+        }
+        return false; // this should never happen, but just in case
     }
 
     public Car getCar(int index) {
@@ -34,7 +40,6 @@ public class Garage {
         }
         Car car = parking[index];
         parking[index] = null;
-        numCars--;
         return car;
     }
 
@@ -45,4 +50,26 @@ public class Garage {
         car.setFuelLevel(car.getFuelLevel());
         return true;
     }
+    public Car callCar(int index) {
+        if (index < 0 || index >= numCars) {
+            return null;
+        }
+        Car car = parking[index];
+        parking[index] = null;
+        return car;
+    }
+    public int getNumCars() {
+        return numCars;
+    }
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Garage:\n");
+        for (int i = 0; i < numCars; i++) {
+            Car car = parking[i];
+            sb.append("  Space ").append(i+1).append(": ").append(car.toString()).append("\n");
+        }
+        return sb.toString();
+    }
+
 }
