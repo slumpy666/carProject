@@ -44,6 +44,18 @@ public class Garage {
         return car;
     }
 
+    public void returnCar(int index, Car car) {
+        if (index < 0 || index >= size) {
+            return;
+        }
+        if (parking[index] != null) {
+            // This index is already occupied, so we cannot return the car here
+            return;
+        }
+        parking[index] = car;
+        numCars++;
+    }
+
     public boolean refuelCar(Car car) {
         if (car == null || car.getFuelLevel() == car.getFuelLevel()) {
             return false;
@@ -66,9 +78,13 @@ public class Garage {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Garage:\n");
-        for (int i = 0; i < numCars; i++) {
-            Car car = parking[i];
-            sb.append("  Space ").append(i+1).append(": ").append(car.toString()).append("\n");
+        for (int i = 0; i < size; i++) {
+            if (parking[i] == null) {
+                sb.append("  Space ").append(i+1).append(": empty\n");
+            } else {
+                Car car = parking[i];
+                sb.append("  Space ").append(i+1).append(": ").append(car.toString()).append("\n");
+            }
         }
         return sb.toString();
     }

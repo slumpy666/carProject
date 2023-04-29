@@ -45,7 +45,7 @@ public class TestTester {
                     refuelCar(garage);
                     break;
                 case "b":
-                    driveCar();
+                    driveCar(garage);
                     break;
                 case "c":
                     addCar(garage);
@@ -78,10 +78,73 @@ public class TestTester {
         System.out.println(garage.toString());
     }
 
-	private static void driveCar() {
-		// TODO Auto-generated method stub
-		
-	}
+    private static void driveCar(Garage garage) {
+        if (garage.getNumCars() == 0) {
+            System.out.println("There are no cars in the garage to drive.");
+            return;
+        }
+
+        int carNumber = 0;
+        System.out.println(garage.toString());
+        System.out.println("Which car would you like to drive?");
+        do {
+            System.out.println("Please enter the car's parking space number for your selection (1-10):");
+            while(!scanner.hasNextInt()) {
+                System.out.println("Invalid input. Please enter a valid integer.");
+                scanner.next();
+            }
+            carNumber = scanner.nextInt();
+        } while (carNumber < 1 || carNumber > garage.getNumCars());
+
+        Car currentCar = garage.callCar(carNumber - 1);
+        if (currentCar == null) {
+            System.out.println("There is no car in that space!");
+            return;
+        }
+
+        System.out.printf("Space %d: %s%n", carNumber, currentCar.toString());
+
+        // Get the index of the car in the garage
+        int index = carNumber - 1;
+
+        double distance = 0.0;
+        System.out.println("How far would you like to drive?");
+        do {
+            System.out.println("Please enter a distance greater than zero.");
+            while(!scanner.hasNextDouble()) {
+                System.out.println("Invalid input. Please enter a valid number.");
+                scanner.next();
+            }
+            distance = scanner.nextDouble();
+        } while (distance <= 0.0);
+
+        double speed = 0.0;
+        System.out.println("How fast would you like to drive?");
+        do {
+            System.out.println("Please enter an amount greater than zero.");
+            while(!scanner.hasNextDouble()) {
+                System.out.println("Invalid input. Please enter a valid number.");
+                scanner.next();
+            }
+            speed = scanner.nextDouble();
+        } while (speed <= 0.0);
+
+        currentCar.setUpTrip(speed, distance);
+        boolean didNotRunOutOfFuel = currentCar.driveCar();
+        if (didNotRunOutOfFuel) {
+            System.out.printf("The car has been driven for %.2f km. It now has %.2f liters of fuel.%n",
+                    distance, currentCar.getFuelLevel());
+            // Return the car to its rightful index in the garage
+            garage.returnCar(index, currentCar);
+        } else {
+            System.out.printf("The car did not have enough fuel to complete the drive. It drove for %.2f km.%n",
+                    currentCar.getOdometer());
+            // Remove the car from the garage since it has run out of fuel
+            garage.getCar(index);
+        }
+
+        System.out.println(garage.toString());
+    }
 
 	private static void refuelCar(Garage garage) {
 	    if (garage.getNumCars() == 0) {
