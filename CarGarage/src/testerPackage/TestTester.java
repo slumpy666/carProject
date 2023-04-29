@@ -66,6 +66,14 @@ public class TestTester {
         }
     }
     
+	private static void printOptions() {
+        System.out.println("A) Refuel a car");
+        System.out.println("B) Get a Car to drive");
+        System.out.println("C) Add a Car");
+        System.out.println("Q) Quit");
+        System.out.println("Please select one of the above choices.");
+    } 
+    
     private static void addCar(Garage garage) {
         Car newCar = buildCar();
         boolean success = garage.addCar(newCar);
@@ -88,7 +96,7 @@ public class TestTester {
         System.out.println(garage.toString());
         System.out.println("Which car would you like to drive?");
         do {
-            System.out.println("Please enter the car's parking space number for your selection (1-10):");
+        	System.out.println("Please enter the parking space number of the car you want to drive (1-" + garage.getNumCars() + "):");
             while(!scanner.hasNextInt()) {
                 System.out.println("Invalid input. Please enter a valid integer.");
                 scanner.next();
@@ -198,14 +206,6 @@ public class TestTester {
 	        System.out.println("The tank is now full.");
 	    }
 	}
-
-	private static void printOptions() {
-        System.out.println("A) Refuel a car");
-        System.out.println("B) Get a Car to drive");
-        System.out.println("C) Add a Car");
-        System.out.println("Q) Quit");
-        System.out.println("Please select one of the above choices.");
-    } 
     
 	private static Car buildCar()
 	{
