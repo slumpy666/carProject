@@ -53,7 +53,6 @@ public class Garage {
             return;
         }
         parking[index] = car;
-        numCars++;
     }
 
     public boolean refuelCar(Car car) {
@@ -89,7 +88,7 @@ public class Garage {
         return sb.toString();
     }
     public void setCar(int index, Car car) {
-        if (index < 0 || index >= numCars) {
+        if (index < 0 || index >= size) {
             return;
         }
         parking[index] = car;
