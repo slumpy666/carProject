@@ -71,5 +71,11 @@ public class Garage {
         }
         return sb.toString();
     }
+    public void setCar(int index, Car car) {
+        if (index < 0 || index >= numCars) {
+            return;
+        }
+        parking[index] = car;
+    }
 
 }

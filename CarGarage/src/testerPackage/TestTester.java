@@ -1,6 +1,7 @@
 package testerPackage;
 import classPackage.Garage;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import classPackage.Car;
@@ -14,8 +15,23 @@ public class TestTester {
         System.out.println("Welcome to the Car and Garage program");
         System.out.println("Enter the number of parking spaces you would like to have in the garage.");
         System.out.println("The number should be between 1 and 10 inclusive.");
-    	
-        numSpaces = scanner.nextInt();
+
+        int numSpaces = 0;
+        boolean validInput = false;
+        while (!validInput) {
+            try {
+                numSpaces = scanner.nextInt();
+                if (numSpaces >= 1 && numSpaces <= 10) {
+                    validInput = true;
+                } else {
+                    System.out.println("Invalid input. Please enter a number between 1 and 10.");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter a valid integer.");
+                scanner.next(); // consume the invalid input to prevent an infinite loop
+            }
+        }
+
         // create a garage with a size of 3
         Garage garage = new Garage(numSpaces);
         
@@ -26,7 +42,7 @@ public class TestTester {
             String input = scanner.next();
             switch(input) {
                 case "a":
-                    refuelCar();
+                    refuelCar(garage);
                     break;
                 case "b":
                     driveCar();
@@ -64,12 +80,59 @@ public class TestTester {
 
 	private static void driveCar() {
 		// TODO Auto-generated method stub
-		Testing();
 	}
 
-	private static void refuelCar() {
-		// TODO Auto-generated method stub
-		
+	private static void refuelCar(Garage garage) {
+	    if (garage.getNumCars() == 0) {
+	        System.out.println("There are no cars in the garage to refuel.");
+	        return;
+	    }
+	    
+	    int carNumber = 0;
+	    double fuelOverage = 0.0;
+	    double fuelAmount = 0.0;
+	    Car currentCar = null;
+	    
+	    System.out.println("Which car would you like to add fuel to?");
+	    do {
+	        do {
+	            if(scanner.hasNextLine()) {
+	                scanner.nextLine();
+	            }
+	            System.out.println("Please enter the car's parking space number for your selection");
+	        } while(!scanner.hasNextInt());
+	        carNumber = scanner.nextInt();
+	    } while (carNumber < 1 || carNumber > garage.getNumCars());
+	    
+	    currentCar = garage.getCar(carNumber - 1);
+	    if (currentCar == null) {
+	        System.out.println("There is no car in that space!");
+	        System.out.printf("Please create a Car for that space.%n");
+	        currentCar = buildCar();
+	        garage.setCar(carNumber - 1, currentCar);
+	    }
+	    String carInfo = currentCar.toString();
+	    System.out.printf("Space %d: %s%n", carNumber, carInfo);
+
+	    System.out.println("How much fuel would you like to add?");
+	    do {
+	        do {
+	            if(scanner.hasNextLine()) {
+	                scanner.nextLine();
+	            }
+	            System.out.println("Please enter an amount greater than zero.");
+	        } while(!scanner.hasNextDouble());
+	        fuelAmount = scanner.nextDouble();
+	    } while (fuelAmount <= 0.0);
+
+	    fuelOverage = currentCar.addFuelToTank(fuelAmount);
+	    if(fuelOverage > 0.0) {
+	        System.out.printf("The tank is full and you have %.2f gallons left in the can.\n", fuelOverage);
+	    } else if(fuelOverage < 0.0) {
+	        System.out.printf("The tank is not full and can take %.2f more gallons of fuel.\n", -fuelOverage);
+	    } else {
+	        System.out.println("The tank is now full.");
+	    }
 	}
 
 	private static void printOptions() {
@@ -79,39 +142,6 @@ public class TestTester {
         System.out.println("Q) Quit");
         System.out.println("Please select one of the above choices.");
     } 
-    private static Car Testing() {
-		
-    {
-        Garage garage = new Garage(numSpaces);
-        // create some cars to add to the garage
-        Car car1 = new Car();
-        Car car2 = new Car();
-        Car car3 = new Car();
-        Car car4 = new Car();
-        Car car5 = new Car();
-        Car car6 = new Car();
-        
-        // try adding the cars to the garage
-        System.out.println("Adding car1 to the garage: " + garage.addCar(car1)); // true
-        System.out.println("Adding car2 to the garage: " + garage.addCar(car2)); // true
-        System.out.println("Adding car3 to the garage: " + garage.addCar(car3)); // true
-        System.out.println("Adding car4 to the garage: " + garage.addCar(car4)); // false, garage is full
-        
-        // try getting a car from the garage
-        System.out.println("Getting car at index 1: " + garage.getCar(1)); // car2
-        System.out.println("Getting car at index 2: " + garage.getCar(2));
-        System.out.println("Getting car at index 2: " + garage.getCar(3));// null
-        
-        // try refueling a car in the garage
-        System.out.println("Refueling car at index 0: " + garage.refuelCar(car1)); // true
-        System.out.println("Refueling car at index 2: " + garage.refuelCar(car3)); // true
-        System.out.println("Refueling car at index 3: " + garage.refuelCar(car4)); // false, car not in garage
-       
-        // check the size of the garage
-        System.out.println("Garage size: " + garage.getGarageSize()); // 
-        return null;
-    	}
-    }
     
 	private static Car buildCar()
 	{
